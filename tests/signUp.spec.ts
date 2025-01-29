@@ -78,19 +78,6 @@ test.describe('Test registration flow', () => {
     await page.locator(selectors.nameField).fill('Test');
     await page.locator(selectors.lastNameField).fill('User');
     await page.locator(selectors.emailField).fill(randomEmail);
-    await page.locator(selectors.passwordField).fill(password);
-    await page.locator(selectors.repeatPasswordField).focus();
-    await page.locator(selectors.repeatPasswordField).blur();
-    
-    await page.locator(selectors.registerButton).isDisabled();
-    await expect (page.locator(selectors.repeatPasswordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
-    await expect(page.locator(selectors.errorMessage)).toHaveText('Re-enter password required');
-  });
-
-  test('Empty Re-enter password field', async ({ page }) => {
-    await page.locator(selectors.nameField).fill('Test');
-    await page.locator(selectors.lastNameField).fill('User');
-    await page.locator(selectors.emailField).fill(randomEmail);
     await page.locator(selectors.passwordField).focus();
     await page.locator(selectors.passwordField).blur();
     await page.locator(selectors.repeatPasswordField).fill(password);
@@ -98,6 +85,19 @@ test.describe('Test registration flow', () => {
     await page.locator(selectors.registerButton).isDisabled();
     await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
     await expect(page.locator(selectors.errorMessage)).toHaveText('Password required');
+  });
+
+  test('Empty Re-enter password field', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill(password);
+    await page.locator(selectors.repeatPasswordField).focus();
+    await page.locator(selectors.repeatPasswordField).blur();
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.repeatPasswordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage)).toHaveText('Re-enter password required');
   });
 
   test('Input not English symbols in Name field', async ({ page }) => {
@@ -220,5 +220,93 @@ test.describe('Test registration flow', () => {
     }
   });
 
+  test('Input incorrect email', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill('aqa@');
+    await page.locator(selectors.passwordField).fill(password);
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.emailField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage)).toHaveText('Email is incorrect');
+  });
 
+  test('Password less than 8 characters', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill('Pass1')
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage))
+    .toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+  });
+
+  test('Password more than 15 characters', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill('Pass1!'.repeat(3))
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage))
+    .toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+  });
+
+  test('Password without any capital character', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill('password55')
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage))
+    .toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+  });
+
+  test('Password without any small character', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill('PASSWORD55');
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage))
+    .toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+  });
+
+  test('Password without any integer', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill('Password');
+    await page.locator(selectors.repeatPasswordField).fill(password);
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.passwordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage))
+    .toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+  });
+
+  test('Passwords do not match', async ({ page }) => {
+    await page.locator(selectors.nameField).fill('Test');
+    await page.locator(selectors.lastNameField).fill('User');
+    await page.locator(selectors.emailField).fill(randomEmail);
+    await page.locator(selectors.passwordField).fill(password);
+    await page.locator(selectors.repeatPasswordField).fill('TesterQA1!#');
+    await page.locator(selectors.repeatPasswordField).blur();
+    
+    await page.locator(selectors.registerButton).isDisabled();
+    await expect (page.locator(selectors.repeatPasswordField)).toHaveCSS('border-color', 'rgb(220, 53, 69)');
+    await expect(page.locator(selectors.errorMessage)).toHaveText('Passwords do not match');
+  });
 });
