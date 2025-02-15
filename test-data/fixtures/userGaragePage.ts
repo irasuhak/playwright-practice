@@ -1,4 +1,4 @@
-import { test as base, chromium } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import GaragePage from '../../page-objects/pages/GaragePage';
 
 type FixturePages = {
@@ -6,9 +6,10 @@ type FixturePages = {
 };
 
 export const test = base.extend<FixturePages>({
-    garagePage: async ({}, use) => {
-        const browser = await chromium.launch();
-        const context = await browser.newContext({ storageState: './test-data/states/userOneState.json' });
+    garagePage: async ({ browser }, use) => {
+        const context = await browser.newContext({ 
+            storageState: './test-data/states/userOneState.json' 
+        });
         const page = await context.newPage();
 
         const garagePage = new GaragePage(page);
@@ -19,7 +20,6 @@ export const test = base.extend<FixturePages>({
         await garagePage.removeLastAddedCar();
 
         await context.close();
-        await browser.close();
     },
 });
 
