@@ -1,4 +1,4 @@
-import { test} from  "../test-data/fixtures/userGaragePage";
+import { test} from  "../test-data/fixtures/userPages";
 
 test.describe('Garage Page - Fixture', () => {
     test('Audi TT to the garage', async ({ garagePage }) => {
