@@ -1,6 +1,9 @@
 name: Playwright Tests
-on: 
-  workflow_dispatch:
+on:
+  push:
+    branches: [ main, action-github ]
+  pull_request:
+    branches: [ main, action-github ]
 jobs:
   test:
     env:
