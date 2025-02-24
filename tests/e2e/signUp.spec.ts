@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import HomePage from '../page-objects/pages/HomePage';
-import SignUpForm from '../page-objects/forms/SignUpForm';
+import HomePage from '../../page-objects/pages/HomePage';
+import SignUpForm from '../../page-objects/forms/SignUpForm';
 
 const randomEmail = `aqa-user-${Date.now()}@test.com`;
 const password = 'TesterQA1!@';
