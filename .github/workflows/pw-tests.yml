@@ -1,16 +1,16 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, action-github ]
+    branches: [ main, actions-github ]
   pull_request:
-    branches: [ main, action-github ]
+    branches: [ main, actions-github ]
 jobs:
   test:
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
       USER_NAME: ${{ secrets.USER_NAME }}
       PASSWORD: ${{ secrets.PASSWORD }}
-    timeout-minutes: 50
+    timeout-minutes: 60
 
     runs-on: ubuntu-latest
     container:
